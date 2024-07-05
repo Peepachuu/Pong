@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <SDL.h>
 #include <stdbool.h>
+#include <player.h>
 
 const int SCREEN_HEIGHT = 720;
 const int SCREEN_WIDTH = 1280;
-
 
 void PlaceCenterRects(SDL_Renderer* renderer) {
     int currentY = 0;
@@ -50,14 +50,10 @@ int main(int argc, char *argv[]) {
     const Uint8 *keyboardState;
     int velocity = 8;
     bool gameIsRunning = true;
-    SDL_Rect userRect;
     SDL_Rect ball;
     SDL_Rect centerRect;
-
-    userRect.x = 0;
-    userRect.y = 200;
-    userRect.w = 30;
-    userRect.h = 150;
+    player_t p1;
+    setPlayerDefaults(&p1);
 
     ball.x = SCREEN_WIDTH/2;
     ball.y = SCREEN_HEIGHT/2;
@@ -82,21 +78,19 @@ int main(int argc, char *argv[]) {
                 gameIsRunning = false;
             }
         }
-        if (keyboardState[SDL_SCANCODE_W]) {
-            userRect.y += -velocity;
-        } else if (keyboardState[SDL_SCANCODE_S]) {
-            userRect.y += velocity;
-        }
+        if (keyboardState[SDL_SCANCODE_W] == 1 || keyboardState[SDL_SCANCODE_S] == 1)
+            printf("%d %d\n", keyboardState[SDL_SCANCODE_W], keyboardState[SDL_SCANCODE_S]);
+        updatePlayerPos(&p1, keyboardState[SDL_SCANCODE_W], keyboardState[SDL_SCANCODE_S]);
+
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
 
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
-        // SDL_RenderDrawLine(renderer, SCREEN_WIDTH/2, 0, SCREEN_WIDTH/2, SCREEN_HEIGHT);
         PlaceCenterRects(renderer);
-        SDL_RenderDrawRect(renderer, &userRect);
-        SDL_RenderFillRect(renderer, &userRect);
+        SDL_RenderDrawRect(renderer, &(p1.playerRect));
+        SDL_RenderFillRect(renderer, &(p1.playerRect));
         SDL_RenderDrawRect(renderer, &ball);
         SDL_RenderFillRect(renderer, &ball);
         SDL_RenderPresent(renderer);

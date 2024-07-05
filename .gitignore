@@ -3,5 +3,5 @@ Main.exe
 SDL2_image.dll
 sdl2-config
 SDL2.dll
-include
+include/sdl
 .vscode
