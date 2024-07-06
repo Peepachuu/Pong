@@ -11,6 +11,11 @@ void updatePlayerPos(player_t* p1, short WPressed, short SPressed) {
     }
     if (p1->direction != 0)
         (p1->playerRect).y += (p1->velocity)*(p1->direction);
+
+    if ((p1->playerRect).y < 0)
+        (p1->playerRect).y = 0;
+    if ((p1->playerRect).y > 570)
+        (p1->playerRect).y = 570;
 }
 
 void setPlayerDefaults(player_t* p1) {
